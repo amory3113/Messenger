@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Messenger</string>
+    <string name="login_screen">Login Screen</string>
+    <string name="go_to_registration">Go to registration</string>
+
+    <string name="sign_up_screen">Sign Up Screen</string>
+    <string name="return_to_login">Return to login</string>
+
+    <string name="chat_list">Chat List</string>
+    <string name="search_friends">Search Friends</string>
+
+    <string name="search_users">Search Users</string>
+    <string name="back">Back</string>
+
+</resources>

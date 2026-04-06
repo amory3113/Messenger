@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Messenger</string>
+    <string name="login_screen">Экран Входа</string>
+    <string name="go_to_registration">Перейти к Регистрации</string>
+
+    <string name="sign_up_screen">Экран Регистрации</string>
+    <string name="return_to_login">Вернуться ко Входу</string>
+
+    <string name="chat_list">Список Чатов</string>
+    <string name="search_friends">Искать друзей</string>
+
+    <string name="search_users">Поиск пользователей</string>
+    <string name="back">Назад</string>
+</resources>
