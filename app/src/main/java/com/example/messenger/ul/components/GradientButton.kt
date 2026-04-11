@@ -18,27 +18,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.messenger.ul.theme.Primary40
 import com.example.messenger.ul.theme.Primary80
+import com.example.messenger.ul.theme.Secondary80
+import com.example.messenger.ul.theme.Secondary90
 
 @Composable
-fun GradientButton(text: String, onClick:()-> Unit, modifier: Modifier = Modifier){
-    val gradient = Brush.horizontalGradient(
-        colors = listOf(
-            Primary40,
-            Primary80
-        )
-    )
+fun GradientButton(text: String, onClick:()-> Unit, modifier: Modifier = Modifier, enabled: Boolean = true){
+    val gradient = if (enabled) {
+        Brush.horizontalGradient(listOf(Primary40, Primary80))
+    } else {
+        Brush.horizontalGradient(listOf(Secondary90, Secondary80))
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
             .background(gradient)
-            .clickable { onClick() }
+            .clickable(enabled = enabled) { onClick() }
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ){
         Text(
             text = text,
-            color = Color.White,
+            color = if (enabled) Color.White else Color.Gray,
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.Bold
             )
