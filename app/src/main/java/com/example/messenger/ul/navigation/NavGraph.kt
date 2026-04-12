@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.messenger.R
+import com.example.messenger.ul.feature.MainScreen
 import com.example.messenger.ul.feature.auth.LoginScreen
 import com.example.messenger.ul.feature.auth.SignUpScreen
 
@@ -22,15 +23,15 @@ fun MainNavGraph(navController: NavHostController){
         navController = navController,
         startDestination = Screen.Login.route
     ) {
-        composable(route = Screen.Login.route){
-            LoginScreen(
-                navController = navController
-            )
+        composable(route = Screen.Login.route) {
+            LoginScreen(navController = navController)
         }
-        composable(route = Screen.SignUp.route){
-            SignUpScreen(
-                navController = navController
-            )
+        composable(route = Screen.SignUp.route) {
+            SignUpScreen(navController = navController)
+        }
+
+        composable(route = Screen.Main.route) {
+            MainScreen(rootNavController = navController)
         }
         composable(route = Screen.ChatList.route){
             PlaceHolderScreen(

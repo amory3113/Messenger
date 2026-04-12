@@ -5,7 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +24,14 @@ import com.example.messenger.ul.theme.Secondary80
 import com.example.messenger.ul.theme.Secondary90
 
 @Composable
-fun GradientButton(text: String, onClick:()-> Unit, modifier: Modifier = Modifier, enabled: Boolean = true){
+fun GradientButton(
+    text: String,
+    onClick:()-> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    isLoading: Boolean = false
+) {
+    val isActuallyEnabled = enabled && !isLoading
     val gradient = if (enabled) {
         Brush.horizontalGradient(listOf(Primary40, Primary80))
     } else {
@@ -37,6 +46,13 @@ fun GradientButton(text: String, onClick:()-> Unit, modifier: Modifier = Modifie
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ){
+        if (isLoading){
+            CircularProgressIndicator(
+                color = Color.White,
+                modifier = Modifier.size(24.dp),
+                strokeWidth = 2.dp
+            )
+        } else {
         Text(
             text = text,
             color = if (enabled) Color.White else Color.Gray,
@@ -44,5 +60,6 @@ fun GradientButton(text: String, onClick:()-> Unit, modifier: Modifier = Modifie
                 fontWeight = FontWeight.Bold
             )
         )
+        }
     }
 }

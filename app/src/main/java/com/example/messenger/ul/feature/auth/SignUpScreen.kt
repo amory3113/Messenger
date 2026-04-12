@@ -88,8 +88,8 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel = viewMo
     LaunchedEffect(authState) {
         when(authState){
             is AuthState.Success -> {
-                navController.navigate(Screen.ChatList.route){
-                    popUpTo(Screen.Login.route) {inclusive = true}
+                navController.navigate(Screen.Main.route) {
+                    popUpTo(Screen.Login.route) { inclusive = true }
                 }
             }
             is AuthState.Error ->{
@@ -210,9 +210,11 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel = viewMo
             )
         }
         item {
+            val isLoading = authState is AuthState.Loading
             GradientButton(
                 text = stringResource(id = R.string.sign_up),
                 enabled = isFormValid,
+                isLoading = isLoading,
                 onClick = {
                     viewModel.signUp(
                         email = email,

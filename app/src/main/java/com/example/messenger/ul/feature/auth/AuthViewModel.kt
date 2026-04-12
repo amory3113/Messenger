@@ -54,4 +54,21 @@ class AuthViewModel : ViewModel(){
     fun resetState() {
         _authState.value = AuthState.Idle
     }
+
+    fun login(email: String, password: String){
+        if (email.isBlank() || password.isBlank()){
+            _authState.value = AuthState.Error("Заполните поля")
+            return
+        }
+        _authState.value = AuthState.Loading
+        viewModelScope.launch {
+            try {
+                auth.signInWithEmailAndPassword(email, password).await()
+                _authState.value = AuthState.Success
+            } catch (e: Exception){
+                _authState.value = AuthState.Error("Неверная почта или пароль")
+            }
+        }
+    }
+
 }
