@@ -16,14 +16,30 @@
     <string name="email">Email address</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="login"> Login</string>
+
+    <string name="login">Login</string>
     <string name="or_sign_up">or Sign Up</string>
     <string name="sign_up">Sign Up</string>
     <string name="create_acc">CREATE ACCOUNT</string>
     <string name="lets_get_started">Let\'s get started</string>
     <string name="full_name">Full Name</string>
     <string name="nickname">Nickname</string>
-    <string name="already_have_acc">Already have an account? </string>
+    <string name="already_have_acc">"Already have an account? "</string>
+
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_fill_fields">Please fill in the fields</string>
+    <string name="error_invalid_credentials">Incorrect email or password</string>
+    <string name="error_fill_all_fields">Please fill in all fields</string>
+    <string name="error_email">Invalid mail format</string>
+    <string name="error_weak_password">Password must be at least 8 characters long, contain uppercase and lowercase letters, numbers, and a special character.</string>
+
+    <string name="my_profile">My Profile</string>
+    <string name="notifications">Notifications</string>
+    <string name="account_privacy">Account Privacy</string>
+    <string name="appearance">Appearance</string>
+    <string name="log_out">Log Out</string>
+
+
 
 
 </resources>

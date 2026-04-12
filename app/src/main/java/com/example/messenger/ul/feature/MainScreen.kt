@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.messenger.ui.feature.profile.ProfileScreen
 import com.example.messenger.ul.navigation.PlaceHolderScreen
 import com.example.messenger.ul.navigation.Screen
 
@@ -88,11 +89,7 @@ fun MainScreen(rootNavController: NavController) {
                 PlaceHolderScreen(title = "Поиск", buttonText = "Искать") { }
             }
             composable(BottomNavItem.Profile.route) {
-                PlaceHolderScreen(title = "Профиль", buttonText = "Выйти") {
-                    rootNavController.navigate(Screen.Login.route) {
-                        popUpTo(0)
-                    }
-                }
+                ProfileScreen(navController = rootNavController, rootNavController)
             }
         }
     }

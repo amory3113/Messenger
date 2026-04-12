@@ -154,7 +154,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel = viewMo
             )
             if (email.isNotEmpty() && !isEmailValid) {
                 Text(
-                    text = "Неверный формат электронной почты",
+                    text = stringResource(id = R.string.error_email),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(bottom = 12.dp, start = 16.dp).fillMaxWidth()
@@ -186,7 +186,7 @@ fun SignUpScreen(navController: NavController, viewModel: AuthViewModel = viewMo
             )
             if (password.isNotEmpty() && !isPasswordStrong) {
                 Text(
-                    text = "Пароль должен быть от 8 символов, содержать заглавные, строчные буквы, цифры и спецсимвол.",
+                    text = stringResource(id = R.string.error_weak_password),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(bottom = 8.dp)
