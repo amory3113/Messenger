@@ -25,6 +25,10 @@
     <string name="full_name">Full Name</string>
     <string name="nickname">Nickname</string>
     <string name="already_have_acc">"Already have an account? "</string>
+    <string name="log_out_acc">Log Out</string>
+    <string name="exit_question">Are you sure you want to log out? You will need to enter your password again.</string>
+    <string name="yes_exit">Yes, log out</string>
+    <string name="cancel">Cancel</string>
 
     <string name="error_unknown">Unknown error</string>
     <string name="error_fill_fields">Please fill in the fields</string>
@@ -32,6 +36,9 @@
     <string name="error_fill_all_fields">Please fill in all fields</string>
     <string name="error_email">Invalid mail format</string>
     <string name="error_weak_password">Password must be at least 8 characters long, contain uppercase and lowercase letters, numbers, and a special character.</string>
+    <string name="user_not_auth">Пользователь не авторизован</string>
+    <string name="data_not_found">Данные не найдены</string>
+    <string name="loading_error">Ошибка загрузки</string>
 
     <string name="my_profile">My Profile</string>
     <string name="notifications">Notifications</string>

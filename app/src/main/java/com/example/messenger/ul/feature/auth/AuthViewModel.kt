@@ -37,11 +37,16 @@ class AuthViewModel : ViewModel(){
                 val authResult = auth.createUserWithEmailAndPassword(email, password).await()
                 val firebaseUser = authResult.user
                 if(firebaseUser != null){
+                    val currentTime = System.currentTimeMillis()
                     val user = User(
                         uid = firebaseUser.uid,
                         fullName = fullName,
                         email = email,
-                        nickname = nickname
+                        nickname = nickname,
+                        phoneNumber = "",
+                        createdAt = currentTime,
+                        isOnline = true,
+                        lastSeen = currentTime
                     )
                     db.collection("users").document(user.uid).set(user).await()
                     _authState.value = AuthState.Success

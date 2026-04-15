@@ -16,12 +16,20 @@ import com.example.messenger.R
 import com.example.messenger.ul.feature.MainScreen
 import com.example.messenger.ul.feature.auth.LoginScreen
 import com.example.messenger.ul.feature.auth.SignUpScreen
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun MainNavGraph(navController: NavHostController){
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
+    val startDestination = if (currentUser != null) {
+        Screen.Main.route
+    } else {
+        Screen.Login.route
+    }
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route
+        startDestination = startDestination
     ) {
         composable(route = Screen.Login.route) {
             LoginScreen(navController = navController)
@@ -32,20 +40,6 @@ fun MainNavGraph(navController: NavHostController){
 
         composable(route = Screen.Main.route) {
             MainScreen(rootNavController = navController)
-        }
-        composable(route = Screen.ChatList.route){
-            PlaceHolderScreen(
-                title = stringResource(id = R.string.chat_list),
-                buttonText = stringResource(id = R.string.search_friends),
-                onClick = { navController.navigate(Screen.Search.route)}
-            )
-        }
-        composable(route = Screen.Search.route){
-            PlaceHolderScreen(
-                title = stringResource(id = R.string.search_users),
-                buttonText = stringResource(id = R.string.back),
-                onClick = { navController.navigate(Screen.ChatList.route)}
-            )
         }
     }
 }

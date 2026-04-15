@@ -20,6 +20,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +46,7 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel()
     ) {
     val profileState by viewModel.profileState.collectAsState()
+    var showLogoutDialog by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,29 +72,36 @@ fun ProfileScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier
-                    .size(110.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-                    .border(3.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    Icons.Default.Person,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             when(val state = profileState){
                 is ProfileState.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.size(30.dp))
                 }
                 is ProfileState.Success -> {
+                    Box(
+                        modifier = Modifier
+                            .size(110.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        val initial = if (state.user.fullName.isNotEmpty()) {
+                            state.user.fullName.take(1).uppercase()
+                        } else {
+                            "?"
+                        }
+
+                        Text(
+                            text = initial,
+                            style = MaterialTheme.typography.displayLarge.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Text(
                         text = state.user.fullName,
                         style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
@@ -137,10 +148,7 @@ fun ProfileScreen(
                 .clip(RoundedCornerShape(24.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
                 .clickable {
-                    viewModel.logout()
-                    rootNavController.navigate(Screen.Login.route){
-                        popUpTo(0)
-                    }
+                    showLogoutDialog = true
                 }
                 .padding(vertical = 16.dp),
             contentAlignment = Alignment.Center
@@ -159,6 +167,48 @@ fun ProfileScreen(
                 )
             }
         }
+    }
+    if (showLogoutDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showLogoutDialog = false
+            },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.log_out_acc),
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            },
+            text = {
+                Text(text = stringResource(id = R.string.exit_question),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showLogoutDialog = false
+                        viewModel.logout()
+                        rootNavController.navigate(Screen.Login.route) {
+                            popUpTo(0)
+                        }
+                    }
+                ) {
+                    Text(stringResource(id = R.string.yes_exit), color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showLogoutDialog = false
+                    }
+                ) {
+                    Text(stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.primary)
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(16.dp)
+        )
     }
 }
 

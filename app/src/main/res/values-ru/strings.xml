@@ -26,6 +26,10 @@
     <string name="full_name">Имя и фамилия</string>
     <string name="nickname">Никнейм</string>
     <string name="already_have_acc">"Уже есть аккаунт? "</string>
+    <string name="log_out_acc">Log Out</string>
+    <string name="exit_question">Are you sure you want to log out? You will need to enter your password again.</string>
+    <string name="yes_exit">Yes, log out</string>
+    <string name="cancel">Cancel</string>
 
     <string name="error_unknown">Неизвестная ошибка</string>
     <string name="error_fill_fields">Заполните поля</string>
@@ -33,6 +37,9 @@
     <string name="error_fill_all_fields">Заполните все поля</string>
     <string name="error_email">Неверный формат почты</string>
     <string name="error_weak_password">Пароль должен быть от 8 символов, содержать заглавные, строчные буквы, цифры и спецсимвол.</string>
+    <string name="user_not_auth">User not authenticated</string>
+    <string name="data_not_found">Data not found</string>
+    <string name="loading_error">Loading error</string>
 
     <string name="my_profile">Мой профиль</string>
     <string name="notifications">Уведомления</string>

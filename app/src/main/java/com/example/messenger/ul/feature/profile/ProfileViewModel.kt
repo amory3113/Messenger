@@ -3,7 +3,6 @@ package com.example.messenger.ul.feature.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.messenger.domain.model.User
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +30,7 @@ class ProfileViewModel : ViewModel() {
     private fun fetchUserProfile(){
         val uid = auth.currentUser?.uid
         if (uid == null){
-            _profileState.value = ProfileState.Error("Пользователь не авторизован")
+            _profileState.value = ProfileState.Error("User not authenticated")
             return
         }
         viewModelScope.launch {
@@ -41,10 +40,10 @@ class ProfileViewModel : ViewModel() {
                 if(user != null){
                     _profileState.value = ProfileState.Success(user)
                 } else {
-                    _profileState.value = ProfileState.Error("Данные не найдены")
+                    _profileState.value = ProfileState.Error("Data not found")
                 }
             } catch (e: Exception) {
-                _profileState.value = ProfileState.Error(e.localizedMessage ?: "Ошибка загрузки")
+                _profileState.value = ProfileState.Error(e.localizedMessage ?: "Loading error")
             }
         }
     }
