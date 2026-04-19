@@ -48,6 +48,11 @@ class ProfileViewModel : ViewModel() {
         }
     }
     fun logout(){
-        auth.signOut()
+        val uid = auth.currentUser?.uid
+        if (uid != null) {
+            db.collection("users").document(uid).update("online", false).addOnCompleteListener {
+                auth.signOut()
+            }
+        }
     }
 }

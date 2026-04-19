@@ -65,4 +65,5 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
 
     implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.lifecycle:lifecycle-process:2.6.2")
 }

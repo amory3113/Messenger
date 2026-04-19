@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,7 +56,24 @@ fun ChatScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         AvatarBadge(name = peerUser?.fullName ?: "")
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text(text = peerUser?.fullName ?: "Загрузка...", fontSize = 18.sp)
+
+                        Column {
+                            Text(
+                                text = peerUser?.fullName ?: "Загрузка...",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            if (peerUser != null) {
+                                val isOnline = peerUser!!.isOnline
+                                Text(
+                                    text = if (isOnline) "В сети" else "Не в сети",
+                                    fontSize = 12.sp,
+                                    color = if (isOnline) MaterialTheme.colorScheme.primary
+                                    else MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
                     }
                 },
                 navigationIcon = {

@@ -34,8 +34,11 @@ class ChatViewModel : ViewModel() {
                 val participants = chatDoc.get("participants") as? List<String> ?: return@launch
                 val peerId = participants.find { it != currentUid } ?: return@launch
 
-                val userDoc = db.collection("users").document(peerId).get().await()
-                _peerUser.value = userDoc.toObject(User::class.java)
+                db.collection("users").document(peerId)
+                    .addSnapshotListener { snapshot, error ->
+                        if (error != null || snapshot == null) return@addSnapshotListener
+                        _peerUser.value = snapshot.toObject(User::class.java)
+                    }
             } catch (e: Exception) {
 
             }
