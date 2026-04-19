@@ -31,15 +31,15 @@ private val LightColorScheme = lightColorScheme(
     onBackground = Neutral10,            // Черный текст
     surface = Neutral99,                 // Фон карточек
     onSurface = Neutral10,
-    surfaceVariant = Neutral90,          // Фон полей ввода (Search)
+    surfaceVariant = Neutral90,
     onSurfaceVariant = Neutral20,
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Primary80,                 // В темной теме основной цвет светлее
+    primary = Primary80,
     onPrimary = Primary20,
-    primaryContainer = Primary30,        // Темно-синие пузыри сообщений
-    onPrimaryContainer = Primary90,      // Светло-голубой текст на них
+    primaryContainer = Primary30,
+    onPrimaryContainer = Primary90,
 
     secondary = Secondary80,
     onSecondary = Secondary20,
