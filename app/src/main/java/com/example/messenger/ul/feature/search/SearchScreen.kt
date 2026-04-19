@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.messenger.domain.model.User
 import com.example.messenger.ul.feature.search.SearchState
 import com.example.messenger.ul.feature.search.SearchViewModel
+import com.example.messenger.ul.navigation.Screen
 import com.example.messenger.ul.theme.Tertiary20
 import com.example.messenger.ul.theme.Tertiary30
 
@@ -109,7 +110,9 @@ fun SearchScreen(
                     ) {
                         items(state.users) { user ->
                             UserListItem(user = user) {
-                                // Действие при клике
+                                viewModel.createOrGetChat(user.uid) { chatId ->
+                                    navController.navigate(Screen.Chat.route + "/$chatId")
+                                }
                             }
                         }
                     }

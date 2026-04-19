@@ -25,6 +25,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.messenger.ui.feature.profile.ProfileScreen
 import com.example.messenger.ui.feature.search.SearchScreen
+import com.example.messenger.ul.feature.chat.ChatListScreen
+import com.example.messenger.ul.feature.chat.ChatScreen
 import com.example.messenger.ul.navigation.PlaceHolderScreen
 import com.example.messenger.ul.navigation.Screen
 
@@ -83,8 +85,8 @@ fun MainScreen(rootNavController: NavController) {
             startDestination = BottomNavItem.Chats.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(BottomNavItem.Chats.route) {
-                PlaceHolderScreen(title = "Чаты", buttonText = "Настройки") { }
+            composable(route = BottomNavItem.Chats.route) {
+                ChatListScreen(navController = rootNavController)
             }
             composable(BottomNavItem.Search.route) {
                 SearchScreen(navController = rootNavController)
@@ -92,6 +94,7 @@ fun MainScreen(rootNavController: NavController) {
             composable(BottomNavItem.Profile.route) {
                 ProfileScreen(navController = rootNavController, rootNavController)
             }
+
         }
     }
 }

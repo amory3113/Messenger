@@ -16,17 +16,14 @@ import com.example.messenger.R
 import com.example.messenger.ul.feature.MainScreen
 import com.example.messenger.ul.feature.auth.LoginScreen
 import com.example.messenger.ul.feature.auth.SignUpScreen
+import com.example.messenger.ul.feature.chat.ChatScreen
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun MainNavGraph(navController: NavHostController){
     val currentUser = FirebaseAuth.getInstance().currentUser
+    val startDestination = if (currentUser != null) Screen.Main.route else Screen.Login.route
 
-    val startDestination = if (currentUser != null) {
-        Screen.Main.route
-    } else {
-        Screen.Login.route
-    }
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -37,9 +34,12 @@ fun MainNavGraph(navController: NavHostController){
         composable(route = Screen.SignUp.route) {
             SignUpScreen(navController = navController)
         }
-
         composable(route = Screen.Main.route) {
             MainScreen(rootNavController = navController)
+        }
+        composable(route = Screen.Chat.route + "/{chatId}") { backStackEntry ->
+            val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
+            ChatScreen(navController = navController, chatId = chatId)
         }
     }
 }

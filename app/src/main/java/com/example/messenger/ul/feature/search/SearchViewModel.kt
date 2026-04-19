@@ -3,6 +3,7 @@ package com.example.messenger.ul.feature.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.messenger.domain.model.Chat
 import com.example.messenger.domain.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -64,4 +65,41 @@ class SearchViewModel : ViewModel(){
             _searchState.value = SearchState.Success(filteredList)
         }
     }
+
+    fun createOrGetChat(targetUserId: String, onChatReady: (String) -> Unit) {
+        val currentUserId = auth.currentUser?.uid ?: return
+
+        viewModelScope.launch {
+            try {
+                val querySnapshot = db.collection("chats")
+                    .whereArrayContains("participants", currentUserId)
+                    .get()
+                    .await()
+                var existingChatId: String? = null
+                for(document in querySnapshot.documents) {
+                    val chat = document.toObject(Chat::class.java)
+                    if(chat != null && chat.participants.contains(targetUserId)) {
+                        existingChatId = chat.chatId
+                        break
+                    }
+                }
+                if(existingChatId != null) {
+                    onChatReady(existingChatId)
+                } else {
+                    val newChatRef = db.collection("chats").document()
+                    val newChat = Chat(
+                        chatId = newChatRef.id,
+                        participants = listOf(currentUserId, targetUserId),
+                        lastMessage = "",
+                        lastMessageTime = System.currentTimeMillis()
+                    )
+                    newChatRef.set(newChat).await()
+                    onChatReady(newChat.chatId)
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
 }
