@@ -32,7 +32,7 @@ private val LightColorScheme = lightColorScheme(
     surface = Neutral99,                 // Фон карточек
     onSurface = Neutral10,
     surfaceVariant = Neutral90,          // Фон полей ввода (Search)
-    onSurfaceVariant = Neutral20         // Текст плейсхолдеров
+    onSurfaceVariant = Neutral20,
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -56,7 +56,7 @@ private val DarkColorScheme = darkColorScheme(
     surface = Neutral10,
     onSurface = Neutral90,
     surfaceVariant = Neutral20,          // Темно-серый фон полей ввода
-    onSurfaceVariant = Neutral80
+    onSurfaceVariant = Neutral80,
 )
 
 
