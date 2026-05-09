@@ -18,10 +18,26 @@ import androidx.navigation.compose.rememberNavController
 import com.example.messenger.ul.feature.chat.PresenceManager
 import com.example.messenger.ul.navigation.MainNavGraph
 import com.example.messenger.ul.theme.MessengerTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if(!task.isSuccessful){
+                println("FCM: Error getting token")
+                return@addOnCompleteListener
+            }
+            val token = task.result
+            println("My FCM toke: $token")
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            if (uid != null) {
+                FirebaseFirestore.getInstance().collection("users").document(uid)
+                    .update("fcmToken", token)
+            }
+        }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStart(owner: LifecycleOwner) {
                 PresenceManager.updateStatus(true)

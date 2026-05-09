@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -68,7 +70,7 @@ fun ChatScreen(
                                 val isOnline = peerUser!!.isOnline
                                 Text(
                                     text = if (isOnline) "В сети" else "Не в сети",
-                                    fontSize = 12.sp,
+                                    fontSize = 15.sp,
                                     color = if (isOnline) MaterialTheme.colorScheme.primary
                                     else MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -87,7 +89,7 @@ fun ChatScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = padding.calculateTopPadding())
+                .padding(top = padding.calculateTopPadding(), bottom = padding.calculateBottomPadding())
                 .background(MaterialTheme.colorScheme.background)
         ) {
 
@@ -114,10 +116,8 @@ fun ChatScreen(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 12.dp, vertical = 8.dp)
-                    .fillMaxWidth()
-                    .navigationBarsPadding()
-                    .imePadding(),
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.Bottom
             ) {
                 Box(
                     modifier = Modifier
@@ -152,6 +152,7 @@ fun ChatScreen(
                         onValueChange = { messageText = it },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = { Text("Сообщение...") },
+                        maxLines = 5,
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Transparent,
                             unfocusedContainerColor = Transparent,
@@ -212,12 +213,25 @@ fun ChatScreen(
                     .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
                 Text(text = message.text, color = textColor)
-                Text(
-                    text = formatTime(message.timestamp),
-                    fontSize = 10.sp,
-                    color = textColor.copy(alpha = 0.7f),
-                    modifier = Modifier.align(Alignment.End)
-                )
+                Row(
+                    modifier = Modifier.align(Alignment.End),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = formatTime(message.timestamp),
+                        fontSize = 14.sp,
+                        color = textColor.copy(alpha = 0.7f)
+                    )
+
+                    if (isMine) {
+                        Icon(
+                            imageVector = if (message.isRead) Icons.Default.DoneAll else Icons.Default.Done,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp).padding(start = 4.dp),
+                            tint = if (message.isRead) Color(0xFF00BFFF) else textColor.copy(alpha = 0.5f)
+                        )
+                    }
+                }
             }
         }
     }

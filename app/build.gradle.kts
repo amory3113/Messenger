@@ -66,4 +66,6 @@ dependencies {
 
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.lifecycle:lifecycle-process:2.6.2")
+
+    implementation("com.google.firebase:firebase-messaging-ktx:23.4.0")
 }

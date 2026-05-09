@@ -52,6 +52,7 @@ class ChatViewModel : ViewModel() {
                 if (error != null || snapshot == null) return@addSnapshotListener
                 val msgs = snapshot.toObjects(Message::class.java)
                 _messages.value = msgs
+                markMessagesAsRead(chatId)
             }
     }
     fun sendMessage(chatId: String, text: String) {
@@ -78,5 +79,26 @@ class ChatViewModel : ViewModel() {
     }
     fun getCurrentUserId(): String {
         return auth.currentUser?.uid ?: ""
+    }
+
+    fun markMessagesAsRead(chatId: String) {
+        val currentUid = auth.currentUser?.uid ?: return
+        viewModelScope.launch {
+            try {
+                val unreadQuery = db.collection("chats").document(chatId)
+                    .collection("messages")
+                    .whereEqualTo("isRead", false)
+                val snapshot = unreadQuery.get().await()
+                val batch = db.batch()
+                for (doc in snapshot.documents) {
+                    if (doc.getString("senderId") != currentUid) {
+                        batch.update(doc.reference, "isRead", true)
+                    }
+                }
+                batch.commit().await()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }
