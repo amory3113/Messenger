@@ -1,6 +1,7 @@
 package com.example.messenger.ui.feature.profile
 
 import android.R.attr.id
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +13,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Palette
@@ -49,6 +52,7 @@ fun ProfileScreen(
     ) {
     val profileState by viewModel.profileState.collectAsState()
     var showLogoutDialog by remember { mutableStateOf(false) }
+    var isNotificationsExpanded by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -79,6 +83,9 @@ fun ProfileScreen(
                 is ProfileState.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.size(30.dp))
                 }
+                is ProfileState.Error -> {
+                    Text(text = state.message, color = Color.Red)
+                }
                 is ProfileState.Success -> {
                     Box(
                         modifier = Modifier
@@ -92,7 +99,6 @@ fun ProfileScreen(
                         } else {
                             "?"
                         }
-
                         Text(
                             text = initial,
                             style = MaterialTheme.typography.displayLarge.copy(
@@ -101,9 +107,7 @@ fun ProfileScreen(
                             )
                         )
                     }
-
                     Spacer(modifier = Modifier.height(16.dp))
-
                     Text(
                         text = state.user.fullName,
                         style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
@@ -114,34 +118,63 @@ fun ProfileScreen(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                }
-                is ProfileState.Error -> {
-                    Text(text = state.message, color = Color.Red)
+                    Spacer(modifier = Modifier.height(32.dp))
+                    ProfileMenuItem(
+                        icon = Icons.Default.Notifications,
+                        text = stringResource(id = R.string.notifications),
+                        trailingIcon = if(isNotificationsExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                        onClick = { isNotificationsExpanded = !isNotificationsExpanded }
+                    )
+
+                    AnimatedVisibility(visible = isNotificationsExpanded) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 12.dp, start = 16.dp, end = 16.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.15f))
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ){
+                            Text(
+                                text = "Mute all notifications",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Switch(
+                                checked = !state.user.notificationsEnabled,
+                                onCheckedChange = { isMuted ->
+                                    viewModel.toggleNotifications(!isMuted)
+                                },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = MaterialTheme.colorScheme.primary,
+                                    checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                                )
+                            )
+                        }
+                    }
+                    ProfileMenuItem(icon = Icons.Default.Lock, text = stringResource(id = R.string.account_privacy))
+                    ProfileMenuItem(
+                        icon = Icons.Default.Palette,
+                        text = stringResource(id = R.string.appearance),
+                        trailingContent = {
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
+                                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                            ) {
+                                Text(
+                                    text = "LIGHT",
+                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    )
                 }
             }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            ProfileMenuItem(icon = Icons.Default.Notifications, text = stringResource(id = R.string.notifications))
-            ProfileMenuItem(icon = Icons.Default.Lock, text = stringResource(id = R.string.account_privacy))
-            ProfileMenuItem(
-                icon = Icons.Default.Palette,
-                text = stringResource(id = R.string.appearance),
-                trailingContent = {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        Text(
-                            text = "LIGHT",
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            )
         }
 
         Box(
@@ -218,6 +251,8 @@ fun ProfileScreen(
 fun ProfileMenuItem(
     icon: ImageVector,
     text: String,
+    onClick: () -> Unit = { /* Заглушка */ },
+    trailingIcon: ImageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
     trailingContent: @Composable (() -> Unit)? = null
 ) {
     Row(
@@ -226,7 +261,7 @@ fun ProfileMenuItem(
             .padding(bottom = 12.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
-            .clickable { /* Заглушка */ }
+            .clickable(onClick = onClick)
             .padding(horizontal = 20.dp, vertical = 18.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -238,6 +273,6 @@ fun ProfileMenuItem(
             modifier = Modifier.weight(1f)
         )
         if (trailingContent != null) trailingContent()
-        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Icon(trailingIcon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

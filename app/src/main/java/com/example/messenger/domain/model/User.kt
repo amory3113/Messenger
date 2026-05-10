@@ -14,5 +14,7 @@ data class User(
 
     @get:PropertyName("online")
     @set:PropertyName("online")
-    var isOnline: Boolean = false
+    var isOnline: Boolean = false,
+
+    val notificationsEnabled: Boolean = true
 )

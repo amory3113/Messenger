@@ -55,4 +55,10 @@ class ProfileViewModel : ViewModel() {
             }
         }
     }
+
+    fun toggleNotifications(enabled: Boolean){
+        val uid = auth.currentUser?.uid?: return
+        db.collection("users").document(uid)
+            .update("notificationsEnabled", enabled)
+    }
 }
